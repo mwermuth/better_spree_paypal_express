@@ -12,14 +12,9 @@ module Spree
           :ItemCategory => "Physical"
         }
       end
-      
-      Rails.logger.info(items)
 
       tax_adjustments = current_order.adjustments.tax
       shipping_adjustments = current_order.adjustments.shipping
-      
-      Rails.logger.info(shipping_adjustments)
-      
 
       current_order.adjustments.eligible.each do |adjustment|
         next if (tax_adjustments + shipping_adjustments).include?(adjustment)
@@ -40,9 +35,6 @@ module Spree
       items.reject! do |item|
         item[:Amount][:value].zero?
       end
-      
-      Rails.logger.info(payment_details(items))
-      
 
       pp_request = provider.build_set_express_checkout({
         :SetExpressCheckoutRequestDetails => {
