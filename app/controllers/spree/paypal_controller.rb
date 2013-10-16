@@ -12,6 +12,8 @@ module Spree
           :ItemCategory => "Physical"
         }
       end
+      
+      Rails.logger.info(items)
 
       tax_adjustments = current_order.adjustments.tax
       shipping_adjustments = current_order.adjustments.shipping
