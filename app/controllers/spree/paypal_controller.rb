@@ -41,7 +41,7 @@ module Spree
         item[:Amount][:value].zero?
       end
       
-      Rails.logger.info(payment_details)
+      Rails.logger.info(payment_details(items))
       
 
       pp_request = provider.build_set_express_checkout({
