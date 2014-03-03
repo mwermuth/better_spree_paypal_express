@@ -9,7 +9,7 @@ module Spree
           :Quantity => item.quantity,
           :Amount => {
             :currencyID => order.currency,
-            :value => item.price
+            :value => item.gprice
           },
           :ItemCategory => "Physical"
         }
