@@ -3,7 +3,7 @@ module Spree
     def express
       items = current_order.line_items.map do |item|
         {
-          :Name => item.product.name,
+          :Name => item.product.name+" with "+(item.collectagrams_length+item.wechselbilds_length).to_s+" Designs",
           :Quantity => item.quantity,
           :Amount => {
             :currencyID => current_order.currency,
