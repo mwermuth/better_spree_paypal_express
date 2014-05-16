@@ -27,6 +27,7 @@ module Spree
             :currencyID => current_order.currency,
             :value => adjustment.amount
           }
+        }
       end
 
 
