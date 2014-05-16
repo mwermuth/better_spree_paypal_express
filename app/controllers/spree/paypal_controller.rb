@@ -17,6 +17,13 @@ module Spree
       shipping_adjustments = current_order.adjustments.shipping
       promotion_adjustments = current_order.adjustments.promotion
 
+      Rails.logger.info(current_order.adjustments)
+
+      Rails.logger.info(tax_adjustments)
+      Rails.logger.info(shipping_adjustments)
+      Rails.logger.info(promotion_adjustments)
+
+
       current_order.adjustments.eligible.each do |adjustment|
         next if (tax_adjustments + shipping_adjustments + promotion_adjustments).include?(adjustment)
         items << {
@@ -29,7 +36,6 @@ module Spree
         }
       end
 
-      Rails.logger.info(items)
 
       # Because PayPal doesn't accept $0 items at all.
       # See #10
