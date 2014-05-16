@@ -15,9 +15,10 @@ module Spree
 
       tax_adjustments = current_order.adjustments.tax
       shipping_adjustments = current_order.adjustments.shipping
+      promotion_adjustments = current_order.adjustments.promotion
 
       current_order.adjustments.eligible.each do |adjustment|
-        next if (tax_adjustments + shipping_adjustments).include?(adjustment)
+        next if (tax_adjustments + shipping_adjustments + promotion_adjustments).include?(adjustment)
         items << {
           :Name => adjustment.label,
           :Quantity => 1,
