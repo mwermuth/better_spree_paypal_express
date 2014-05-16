@@ -15,19 +15,23 @@ module Spree
 
       tax_adjustments = current_order.adjustments.tax
       shipping_adjustments = current_order.adjustments.shipping
-      promotion_adjustments = current_order.adjustments.promotion
 
 
 
       current_order.adjustments.eligible.each do |adjustment|
-        items << {
-          :Name => adjustment.label,
-          :Quantity => 1,
-          :Amount => {
-            :currencyID => current_order.currency,
-            :value => adjustment.amount
+        if shipping_adjustments.include?(adjustment) || tax_adjustments.include?(adjustment)
+
+        else
+          items << {
+              :Name => adjustment.label,
+              :Quantity => 1,
+              :Amount => {
+                  :currencyID => current_order.currency,
+                  :value => adjustment.amount
+              }
           }
-        }
+        end
+
       end
 
 
@@ -47,9 +51,6 @@ module Spree
           :CancelURL =>  cancel_paypal_url,
           :PaymentDetails => [payment_details(items)]
         }})
-
-      Rails.logger.info(pp_request)
-
 
       begin
         pp_response = provider.set_express_checkout(pp_request)
