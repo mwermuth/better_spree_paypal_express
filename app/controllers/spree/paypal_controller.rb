@@ -28,6 +28,8 @@ module Spree
         }
       end
 
+      Rails.logger.info(items)
+
       # Because PayPal doesn't accept $0 items at all.
       # See #10
       # https://cms.paypal.com/uk/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECCustomizing
@@ -35,6 +37,8 @@ module Spree
       items.reject! do |item|
         item[:Amount][:value].zero?
       end
+
+      Rails.logger.info(items)
 
       pp_request = provider.build_set_express_checkout({
         :SetExpressCheckoutRequestDetails => {
