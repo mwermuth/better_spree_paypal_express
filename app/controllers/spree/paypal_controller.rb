@@ -16,24 +16,17 @@ module Spree
       tax_adjustments = current_order.adjustments.tax
       shipping_adjustments = current_order.adjustments.shipping
 
-
-
       current_order.adjustments.eligible.each do |adjustment|
-        if shipping_adjustments.include?(adjustment) || tax_adjustments.include?(adjustment)
-
-        else
-          items << {
-              :Name => adjustment.label,
-              :Quantity => 1,
-              :Amount => {
-                  :currencyID => current_order.currency,
-                  :value => adjustment.amount
-              }
+        next if (tax_adjustments + shipping_adjustments).include?(adjustment)
+        items << {
+          :Name => adjustment.label,
+          :Quantity => 1,
+          :Amount => {
+            :currencyID => current_order.currency,
+            :value => adjustment.amount
           }
-        end
-
+        }
       end
-
 
       # Because PayPal doesn't accept $0 items at all.
       # See #10
@@ -43,10 +36,9 @@ module Spree
         item[:Amount][:value].zero?
       end
 
-      Rails.logger.info(items)
-
       pp_request = provider.build_set_express_checkout({
         :SetExpressCheckoutRequestDetails => {
+          :InvoiceID => order.number,
           :ReturnURL => confirm_paypal_url(:payment_method_id => params[:payment_method_id]),
           :CancelURL =>  cancel_paypal_url,
           :PaymentDetails => [payment_details(items)]
