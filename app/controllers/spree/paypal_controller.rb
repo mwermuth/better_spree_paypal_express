@@ -38,7 +38,7 @@ module Spree
 
       pp_request = provider.build_set_express_checkout({
         :SetExpressCheckoutRequestDetails => {
-          :OrderID => current_order.number,
+          :InvoiceID => current_order.number,
           :ReturnURL => confirm_paypal_url(:payment_method_id => params[:payment_method_id]),
           :CancelURL =>  cancel_paypal_url,
           :PaymentDetails => [payment_details(items)]

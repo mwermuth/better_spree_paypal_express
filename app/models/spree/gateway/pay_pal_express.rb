@@ -34,16 +34,17 @@ module Spree
     end
 
     def purchase(amount, express_checkout, gateway_options={})
+      pp_details_request = provider.build_get_express_checkout_details({
+        :Token => express_checkout.token
+      })
+      pp_details_response = provider.get_express_checkout_details(pp_details_request)
+      
       pp_request = provider.build_do_express_checkout_payment({
         :DoExpressCheckoutPaymentRequestDetails => {
           :PaymentAction => "Sale",
           :Token => express_checkout.token,
           :PayerID => express_checkout.payer_id,
-          :PaymentDetails => [{
-            :OrderTotal => {
-              :currencyID => Spree::Config[:currency],
-              :value => ::Money.new(amount, Spree::Config[:currency]).to_s.gsub(',', '.') }
-          }]
+          :PaymentDetails => pp_details_response.get_express_checkout_details_response_details.PaymentDetails
         }
       })
 
